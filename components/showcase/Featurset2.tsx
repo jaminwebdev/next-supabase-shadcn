@@ -27,37 +27,37 @@ const FeatureSet2 = ({
       title: 'Performance',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <Timer className="size-4 md:size-6" />,
+      icon: <Timer className="size-4 md:size-6 stroke-background" />,
     },
     {
       title: 'Innovation',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <Zap className="size-4 md:size-6" />,
+      icon: <Zap className="size-4 md:size-6 stroke-background" />,
     },
     {
       title: 'Quality',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <ZoomIn className="size-4 md:size-6" />,
+      icon: <ZoomIn className="size-4 md:size-6 stroke-background" />,
     },
     {
       title: 'Accessibility',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <PersonStanding className="size-4 md:size-6" />,
+      icon: <PersonStanding className="size-4 md:size-6 stroke-background" />,
     },
     {
       title: 'Affordability',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <DollarSign className="size-4 md:size-6" />,
+      icon: <DollarSign className="size-4 md:size-6 stroke-background" />,
     },
     {
       title: 'Customer Support',
       description:
         'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-      icon: <MessagesSquare className="size-4 md:size-6" />,
+      icon: <MessagesSquare className="size-4 md:size-6 stroke-background" />,
     },
   ],
 }: Feature17Props) => {
@@ -74,7 +74,7 @@ const FeatureSet2 = ({
               className="flex gap-6 rounded-lg md:block md:p-8 bg-muted"
               key={idx}
             >
-              <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-background md:size-12">
+              <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-primary md:size-12">
                 {feature.icon}
               </span>
               <div>
