@@ -1,8 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Getting Started Locally
 
-First, run the development server:
+First, sign up and create a supabase project, and then add the following to a `.env.local`
+
+```
+NEXT_PUBLIC_SUPABASE_URL={SupabaseUrl}
+NEXT_PUBLIC_SUPABASE_ANON_KEY={SupabaseAnonKey}
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -16,21 +23,50 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- NextJS
+- Shadcn and Tailwind
+- Supabase
+- Tanstack/React Query
+- Recharts (for Shadcn charts)
 
-## Learn More
+## Data Flow
 
-To learn more about Next.js, take a look at the following resources:
+I believe in granular data invalidation, and at the moment NextJS doesn't provide a straightforward way to invalidate individual calls in the same fashion that ReactQuery does with its `invalidateQueries` method. 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To get around this, I think one of the cleanest solutions is to query data via RSC's on the server, pass said data to client components that themselves initiate a React Query client with initial data. Subsequent calls to `invalidateQueries` can then be applied to individual calls as opposed to entire routes. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Here's how:
 
-## Deploy on Vercel
+### Data Fetching
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Pages are server rendered with top level `await` calls via a server-side `supabase-js` client
+![](./public/images/step-1.jpg)
+- That data is passed to a client component via props
+![](./public/images/step-2.jpg)
+- That client component calls a hook passing in the data as `initialData`
+  - Said hooks are mostly an abstraction around a React Query method
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> client component calling hook & passing the initial data
+![](./public/images/step-3a.jpg)
+
+> hook
+![](./public/images/step-3b.jpg)
+
+- Any subsequent call to `invalidateQueries` that includes the `queryKey` provided, data will be refetched client-side
+
+### Mutations
+
+- Mutations are provided via hooks, which wrap server actions that interact with the db server-side
+> hook
+![](./public/images/step-4.jpg)
+
+
+> action
+![](./public/images/step-5.jpg)
+
+- The invalidation call within said mutation triggers the refetch in the appropriate client-side queries
+- Any given client-side component can call a mutation, which in turn calls a server action, and upon completion it invalidates the appropriate queries client-side. 
+
+
